@@ -8,16 +8,14 @@ Aggressor Script automates the generation of a HTML document containing a link t
 
 ![image](./screenshots/01-show-sites.png)
 
-2. Upload script to cobalt strike
+2. Upload script to cobalt strike and navigate to Attacks -> HTML Generation
 
+![image](./screenshots/02-showing-option.png)
 
-3. Attacks -> HTML Generation
+3. Enable or Disable Port numbers in output
 
+![image](./screenshots/03-choose-option.png)
 
-4. Enable or Disable Port numbers in output
+4. Save file and view results
 
-
-5. Save File
-
-
-6. Results
+![image](./screenshots/04-view-results.png)
