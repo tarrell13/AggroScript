@@ -6,7 +6,7 @@ Aggressor Script automates the generation of a HTML document containing a link t
 
 1. Payloads currently listed under Attacks -> Manage 
 
-!(./screenshots/01-show-sites.png)
+![image](./screenshots/01-show-sites.png)
 
 2. Upload script to cobalt strike
 
