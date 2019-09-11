@@ -4,7 +4,7 @@ Aggressor Script automates the generation of a HTML document containing a link t
 
 ## Example:
 
-1. Payloads currently listed under Attacks -> Manage 
+1. Payloads currently listed under Attacks -> Web Drive-by -> Manage 
 
 ![image](./screenshots/01-show-sites.png)
 
