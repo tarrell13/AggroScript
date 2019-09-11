@@ -1,0 +1,88 @@
+# HTML Payload Generator
+# Author: @Tarrell13
+# Script will automatically generate an HTML document containing links to all the crafted payloads for easy testing
+
+# OPTIONS
+%generate_options["enable"] = 'true';
+
+# Adding the item to the menu bar under Attacks -> HTML Generation
+popup attacks {
+	item "&HTML Generation" {
+		presentMenu();
+	}
+}
+
+# Function retrieves payloads
+sub generatePayloadList {
+	
+	@payloads_hash = sites();
+	@payload_list = @();
+
+	foreach $index => $site (@payloads_hash) {
+		foreach $value (keys($site)){
+			if ($site["Type"] eq "page"){
+				if (%generation_options["enabled"] eq 'true'){
+					$url = $site["Proto"].$site["Host"].":".$site["Port"].$site["URI"];
+				}else{
+					$url = $site["Proto"].$site["Host"].$site["URI"];
+				}
+				if ($url in @payload_list){
+				}else{
+					push(@payload_list, $url);
+				}
+			}
+		}
+	}
+
+	return @payload_list;
+}
+
+# Function will take the links and generate the HTML document.
+sub generateHTML {
+
+	$html = "<!DOCTYPE HTML>\n";
+	$html .= "<html>\n";
+	$html .= "    <title>Payload Testing</title>\n";
+	$html .= "    <body>\n";
+	$html .= "        <ul>\n";
+
+	foreach $index => $url ($1){
+		$html .= "        <li><a href=\"";
+		$html .= $url;
+		$html .= "\">";
+		$html .= $url;
+		$html .= "</a></li>\n";
+	}
+
+	$html .= "        </ul>\n";
+	$html .= "    </body>\n";
+	$html .= "</html>";
+
+	
+	return $html;
+}
+
+# Builds menu box
+sub presentMenu {
+
+	$dialog = dialog("Payload HTML Generator", %generate_options, &main);
+
+	dialog_description($dialog, "Generate HTML document containing link to payloads");
+	dbutton_action($dialog, "Generate");
+	drow_checkbox($dialog, "enable", "", "Output ports with URLs");
+	dialog_show($dialog);
+}
+
+# Main Function
+sub main {
+	
+	%generation_options["enable"] = $3["enable"];
+
+	prompt_file_save($null, {
+		$html = generateHTML(generatePayloadList());
+		$handle = openf("> $1");
+		println($handle, $html);
+		closef($handle);
+	});
+}
+
