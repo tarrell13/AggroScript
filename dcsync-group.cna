@@ -1,5 +1,5 @@
 # Automated Commands
-# Author: @Tarrell13 & @ExpressoCake
+# Author: @Tarrell13 & @EspressoCake
 # Script will register a command to perform DCSYNC operation over an entire specified Group of users. 
 
 global('$DCSYNC $bid $fqdn $domain $group');
